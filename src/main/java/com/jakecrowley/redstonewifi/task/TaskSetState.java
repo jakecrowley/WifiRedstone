@@ -2,6 +2,8 @@ package com.jakecrowley.redstonewifi.task;
 
 import com.jakecrowley.redstonewifi.RSWifiAppMod;
 import com.jakecrowley.redstonewifi.app.RSWifiApp;
+import com.jakecrowley.redstonewifi.block.BlockReceiver;
+import com.jakecrowley.redstonewifi.tileentity.TileEntityReceiver;
 import com.mrcrayfish.device.api.task.Task;
 import com.mrcrayfish.device.core.network.NetworkDevice;
 import net.minecraft.block.state.IBlockState;

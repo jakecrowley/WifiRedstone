@@ -6,6 +6,7 @@ import com.jakecrowley.redstonewifi.init.RegistrationHandler;
 import com.jakecrowley.redstonewifi.task.TaskSetState;
 import com.jakecrowley.redstonewifi.task.TaskVariables;
 import com.mrcrayfish.device.api.ApplicationManager;
+import com.mrcrayfish.device.api.task.Task;
 import com.mrcrayfish.device.api.task.TaskManager;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.Mod;
@@ -15,6 +16,8 @@ import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 import org.apache.logging.log4j.Logger;
 
+import java.util.ArrayList;
+
 @Mod(modid = Reference.MOD_ID, version = Reference.MOD_VERSION, acceptedMinecraftVersions = Reference.MC_VERSION, dependencies = Reference.DEPENDS)
 public class RSWifiAppMod
 {
@@ -23,6 +26,8 @@ public class RSWifiAppMod
     public static RSWifiAppMod instance = new RSWifiAppMod();
 
     public static TaskVariables tvars = new TaskVariables();
+
+    public static ArrayList<Task> toSet = new ArrayList<>();
 
     private static Logger logger;
 

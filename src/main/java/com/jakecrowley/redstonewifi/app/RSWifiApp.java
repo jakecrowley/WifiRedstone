@@ -60,7 +60,6 @@ public class RSWifiApp extends Application {
 		{
 			if(success)
 			{
-				System.out.println(tagCompound.toString());
 				for(String s : tagCompound.toString().split("pos:")){
 					if(!s.equals("{network_devices:[{")) {
 						if(s.indexOf("L") > -1) {
@@ -72,7 +71,9 @@ public class RSWifiApp extends Application {
 						}
 					}
 				}
-				if(receivers.size() >= 1)
+				if(receiverList.getSelectedIndex() != -1)
+					state.setText("State: " + ((receivers.get(receiverList.getSelectedIndex()).getValue(BlockReceiver.ON)) ? "ON" : "OFF"));
+				else if(receivers.size() >= 1)
 					state.setText("State: " + ((receivers.get(0).getValue(BlockReceiver.ON)) ? "ON" : "OFF"));
 			}
 		});
