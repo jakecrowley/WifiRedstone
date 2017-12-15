@@ -4,13 +4,10 @@ import com.jakecrowley.redstonewifi.app.RSWifiApp;
 import com.jakecrowley.redstonewifi.gui.GuiHandler;
 import com.jakecrowley.redstonewifi.init.RegistrationHandler;
 import com.jakecrowley.redstonewifi.task.TaskSetState;
-import com.jakecrowley.redstonewifi.task.TaskVariables;
 import com.mrcrayfish.device.api.ApplicationManager;
 import com.mrcrayfish.device.api.task.Task;
 import com.mrcrayfish.device.api.task.TaskManager;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.BlockPos;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -26,8 +23,6 @@ public class RSWifiAppMod
 
     @Mod.Instance
     public static RSWifiAppMod instance = new RSWifiAppMod();
-
-    public static TaskVariables tvars = new TaskVariables();
 
     public static ArrayList<Task> toSet = new ArrayList<>();
 

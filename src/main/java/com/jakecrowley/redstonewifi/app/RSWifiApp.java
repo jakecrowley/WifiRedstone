@@ -12,21 +12,14 @@ import com.mrcrayfish.device.api.app.component.Label;
 import com.mrcrayfish.device.api.task.Task;
 import com.mrcrayfish.device.api.task.TaskManager;
 import com.mrcrayfish.device.core.Laptop;
-import com.mrcrayfish.device.core.network.NetworkDevice;
-import com.mrcrayfish.device.core.network.Router;
 import com.mrcrayfish.device.core.network.task.TaskGetDevices;
-import com.mrcrayfish.device.tileentity.TileEntityLaptop;
-import com.mrcrayfish.device.tileentity.TileEntityRouter;
-import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 public class RSWifiApp extends Application {
 

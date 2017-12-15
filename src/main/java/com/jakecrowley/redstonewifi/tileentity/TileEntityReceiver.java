@@ -8,11 +8,14 @@ import com.mrcrayfish.device.api.task.Task;
 import com.mrcrayfish.device.api.task.TaskManager;
 import com.mrcrayfish.device.core.network.Connection;
 import com.mrcrayfish.device.tileentity.TileEntityDevice;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import java.util.ConcurrentModificationException;
 
@@ -45,8 +48,12 @@ public class TileEntityReceiver extends TileEntityDevice {
             }
         } catch (ConcurrentModificationException e){ /* NOOP */ }
 
-        BlockPos pos = new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
-        world.setBlockState(pos, world.getBlockState(pos).withProperty(BlockReceiver.ON, nbt.getBoolean("on")));
+        try {
+            FMLCommonHandler.instance().getMinecraftServerInstance().getServerOwner();
+        } catch (NullPointerException e){
+            BlockPos pos = new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
+            world.setBlockState(pos, world.getBlockState(pos).withProperty(BlockReceiver.ON, nbt.getBoolean("on")));
+        }
 
         super.readFromNBT(nbt);
         this.nbt = nbt;

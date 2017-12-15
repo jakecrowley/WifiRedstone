@@ -61,16 +61,6 @@ public class BlockReceiver extends BlockHorizontal implements ITileEntityProvide
         this.setRegistryName("receiver");
     }
 
-    //TODO on command, worldIn.setBlockState(pos, state.withProperty(ON, Boolean.valueOf(true))
-
-/*    @Override
-    @SideOnly(Side.CLIENT)
-    public BlockRenderLayer getBlockLayer()
-    {
-        return BlockRenderLayer.TRANSLUCENT;
-    }
-*/
-
     @Override
     public int getWeakPower(IBlockState blockState, IBlockAccess blockAccess, BlockPos pos, EnumFacing side)
     {
