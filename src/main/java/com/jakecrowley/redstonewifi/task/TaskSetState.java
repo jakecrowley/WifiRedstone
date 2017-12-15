@@ -6,6 +6,8 @@ import com.jakecrowley.redstonewifi.block.BlockReceiver;
 import com.jakecrowley.redstonewifi.tileentity.TileEntityReceiver;
 import com.mrcrayfish.device.api.task.Task;
 import com.mrcrayfish.device.core.network.NetworkDevice;
+import com.mrcrayfish.device.object.tiles.Tile;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
@@ -20,28 +22,32 @@ import java.util.Collection;
 public class TaskSetState extends Task
 {
 
-    private String task;
+    private BlockPos bPos;
+    private boolean state;
+
     private TaskSetState()
     {
         super("set_state");
     }
 
-    public TaskSetState(World world, BlockPos bPos, IBlockState st)
+    public TaskSetState(BlockPos bPos, boolean state)
     {
         this();
-        this.task = this.toString();
-        RSWifiAppMod.tvars.addVariable(this.task, st, bPos);
+        this.bPos = bPos;
+        this.state = state;
     }
 
     @Override
     public void prepareRequest(NBTTagCompound nbt) {
-        nbt.setString("task", this.task);
+        nbt.setLong("pos", bPos.toLong());
+        nbt.setBoolean("state", state);
     }
 
     @Override
     public void processRequest(NBTTagCompound nbt, World world, EntityPlayer player) {
-        BlockPos blockPos = RSWifiAppMod.tvars.positions.get(nbt.getString("task"));
-        IBlockState blockState = RSWifiAppMod.tvars.states.get(nbt.getString("task"));
+        System.out.println(nbt);
+        BlockPos blockPos = BlockPos.fromLong(nbt.getLong("pos"));
+        IBlockState blockState = world.getBlockState(blockPos).withProperty(BlockReceiver.ON, nbt.getBoolean("state"));
         world.setBlockState(blockPos, blockState);
     }
 
@@ -49,7 +55,5 @@ public class TaskSetState extends Task
     public void prepareResponse(NBTTagCompound nbt) { }
 
     @Override
-    public void processResponse(NBTTagCompound nbt) {
-        RSWifiAppMod.tvars.clearVariables(this.task);
-    }
+    public void processResponse(NBTTagCompound nbt) { }
 }

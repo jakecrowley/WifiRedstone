@@ -29,8 +29,7 @@ public class TileEntityReceiver extends TileEntityDevice {
     public void onLoad()
     {
         if(this.nbt != null) {
-            RSWifiAppMod.toSet.add(new TaskSetState(world, this.getPos(),
-                    world.getBlockState(this.getPos()).withProperty(BlockReceiver.ON, this.nbt.getBoolean("on"))));
+            RSWifiAppMod.toSet.add(new TaskSetState(this.getPos(), this.nbt.getBoolean("on")));
         }
     }
 
@@ -44,7 +43,11 @@ public class TileEntityReceiver extends TileEntityDevice {
                     TaskManager.sendTask(t);
                 }
             }
-        } catch (ConcurrentModificationException e){ /**/ }
+        } catch (ConcurrentModificationException e){ /* NOOP */ }
+
+        BlockPos pos = new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
+        world.setBlockState(pos, world.getBlockState(pos).withProperty(BlockReceiver.ON, nbt.getBoolean("on")));
+
         super.readFromNBT(nbt);
         this.nbt = nbt;
     }

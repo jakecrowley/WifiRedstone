@@ -91,8 +91,9 @@ public class RSWifiApp extends Application {
 			receivers.remove(receiverList.getSelectedIndex());
 			receivers.add(receiverList.getSelectedIndex(), blockState);
 
-			Task ts = new TaskSetState(world, recpos.get(receiverList.getSelectedIndex()), blockState);
+			Task ts = new TaskSetState(recpos.get(receiverList.getSelectedIndex()), !on);
 			TaskManager.sendTask(ts);
+			world.setBlockState(recpos.get(receiverList.getSelectedIndex()), blockState);
 
 			state.setText("State: " + (!on ? "ON" : "OFF"));
 		});
