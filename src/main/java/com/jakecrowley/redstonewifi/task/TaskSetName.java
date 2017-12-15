@@ -19,35 +19,38 @@ import java.util.Collection;
 /**
  * Author: MrCrayfish
  */
-public class TaskSetState extends Task
+public class TaskSetName extends Task
 {
 
     private BlockPos bPos;
-    private boolean state;
+    private String name;
 
-    private TaskSetState()
+    private TaskSetName()
     {
-        super("set_state");
+        super("set_name");
     }
 
-    public TaskSetState(BlockPos bPos, boolean state)
+    public TaskSetName(BlockPos bPos, String name)
     {
         this();
         this.bPos = bPos;
-        this.state = state;
+        this.name = name;
     }
 
     @Override
     public void prepareRequest(NBTTagCompound nbt) {
         nbt.setLong("pos", bPos.toLong());
-        nbt.setBoolean("state", state);
+        nbt.setString("name", name);
     }
 
     @Override
     public void processRequest(NBTTagCompound nbt, World world, EntityPlayer player) {
-        BlockPos blockPos = BlockPos.fromLong(nbt.getLong("pos"));
-        IBlockState blockState = world.getBlockState(blockPos).withProperty(BlockReceiver.ON, nbt.getBoolean("state"));
-        world.setBlockState(blockPos, blockState);
+        BlockPos pos = BlockPos.fromLong(nbt.getLong("pos"));
+        String name = nbt.getString("name");
+        TileEntityReceiver receiver = ((TileEntityReceiver)world.getTileEntity(pos));
+        NBTTagCompound tag = receiver.writeSyncTag();
+        tag.setString("name", name);
+        receiver.writeToNBT(tag);
     }
 
     @Override

@@ -2,6 +2,7 @@ package com.jakecrowley.redstonewifi.app;
 
 
 import com.jakecrowley.redstonewifi.block.BlockReceiver;
+import com.jakecrowley.redstonewifi.task.TaskSetName;
 import com.jakecrowley.redstonewifi.task.TaskSetState;
 import com.jakecrowley.redstonewifi.tileentity.TileEntityReceiver;
 import com.mrcrayfish.device.api.app.Application;
@@ -9,6 +10,7 @@ import com.mrcrayfish.device.api.app.Layout;
 import com.mrcrayfish.device.api.app.component.Button;
 import com.mrcrayfish.device.api.app.component.ItemList;
 import com.mrcrayfish.device.api.app.component.Label;
+import com.mrcrayfish.device.api.app.component.TextField;
 import com.mrcrayfish.device.api.task.Task;
 import com.mrcrayfish.device.api.task.TaskManager;
 import com.mrcrayfish.device.core.Laptop;
@@ -26,8 +28,10 @@ public class RSWifiApp extends Application {
 	public static Application application;
 
 	public static ItemList receiverList = new ItemList(10, 5, 70, 6);
-	public static Label state = new Label("State:", 90, 20);
-	public static Button toggleButton = new Button(90, 30, "Toggle");
+	public static Label state = new Label("State:", 90, 10);
+	public static Button toggleButton = new Button(90, 20, "Toggle");
+	public static TextField receiverName = new TextField(90, 40, 90);
+	public static Button changeName = new Button(90, 60, "Set Name");
 
 	public RSWifiApp() {
 		super();
@@ -40,6 +44,8 @@ public class RSWifiApp extends Application {
 		mainLayout.addComponent(receiverList);
 		mainLayout.addComponent(state);
 		mainLayout.addComponent(toggleButton);
+		mainLayout.addComponent(receiverName);
+		mainLayout.addComponent(changeName);
 
 		World world = Minecraft.getMinecraft().world;
 
@@ -60,7 +66,12 @@ public class RSWifiApp extends Application {
 							BlockPos blockPos = BlockPos.fromLong(Long.parseLong(longstr));
 							receivers.add(world.getBlockState(blockPos));
 							recpos.add(blockPos);
-							receiverList.addItem("Receiver #" + receivers.size());
+
+							String name = ((TileEntityReceiver)world.getTileEntity(blockPos)).getName();
+							if(name != null)
+								receiverList.addItem(name);
+							else
+								receiverList.addItem("Receiver #" + receivers.size());
 						}
 					}
 				}
@@ -89,6 +100,43 @@ public class RSWifiApp extends Application {
 			world.setBlockState(recpos.get(receiverList.getSelectedIndex()), blockState);
 
 			state.setText("State: " + (!on ? "ON" : "OFF"));
+		});
+
+		changeName.setClickListener((x, y, mB) -> {
+			Task tsk = new TaskSetName(recpos.get(receiverList.getSelectedIndex()), receiverName.getText());
+			TaskManager.sendTask(tsk);
+
+			receiverList.removeAll();
+			receivers.clear();
+			recpos.clear();
+			Task taskrefresh = new TaskGetDevices(Laptop.getPos(), TileEntityReceiver.class);
+			taskrefresh.setCallback((tagCompound, success) ->
+			{
+				if(success)
+				{
+					for(String s : tagCompound.toString().split("pos:")){
+						if(!s.equals("{network_devices:[{")) {
+							if(s.indexOf("L") > -1) {
+								String longstr = s.substring(0, s.indexOf("L"));
+								BlockPos blockPos = BlockPos.fromLong(Long.parseLong(longstr));
+								receivers.add(world.getBlockState(blockPos));
+								recpos.add(blockPos);
+
+								String name = ((TileEntityReceiver)world.getTileEntity(blockPos)).getName();
+								if(name != null)
+									receiverList.addItem(name);
+								else
+									receiverList.addItem("Receiver #" + receivers.size());
+							}
+						}
+					}
+					if(receiverList.getSelectedIndex() != -1)
+						state.setText("State: " + ((receivers.get(receiverList.getSelectedIndex()).getValue(BlockReceiver.ON)) ? "ON" : "OFF"));
+					else if(receivers.size() >= 1)
+						state.setText("State: " + ((receivers.get(0).getValue(BlockReceiver.ON)) ? "ON" : "OFF"));
+				}
+			});
+			TaskManager.sendTask(taskrefresh);
 		});
 
 		this.setCurrentLayout(mainLayout);

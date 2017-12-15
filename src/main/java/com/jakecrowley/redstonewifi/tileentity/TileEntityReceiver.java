@@ -62,8 +62,10 @@ public class TileEntityReceiver extends TileEntityDevice {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
-        super.writeToNBT(nbt);
+        nbt = (this.nbt != null) ? this.nbt : nbt;
         nbt.setBoolean("on", world.getBlockState(this.getPos()).getValue(BlockReceiver.ON));
+        this.nbt = nbt;
+        super.writeToNBT(nbt);
         return nbt;
     }
 
@@ -71,8 +73,9 @@ public class TileEntityReceiver extends TileEntityDevice {
     @Override
     public NBTTagCompound writeSyncTag()
     {
-        NBTTagCompound tag = new NBTTagCompound();
+        NBTTagCompound tag = (this.nbt != null) ? this.nbt : new NBTTagCompound();
         tag.setBoolean("on", world.getBlockState(this.getPos()).getValue(BlockReceiver.ON));
+        this.nbt = tag;
         return tag;
     }
 
@@ -80,5 +83,9 @@ public class TileEntityReceiver extends TileEntityDevice {
     @Override
     public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate) {
         return oldState.getBlock() != newSate.getBlock();
+    }
+
+    public String getName(){
+        return (nbt.hasKey("name")) ? nbt.getString("name") : null;
     }
 }
