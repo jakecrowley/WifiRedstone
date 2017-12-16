@@ -14,9 +14,12 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 
+import javax.annotation.Nullable;
 import java.util.ConcurrentModificationException;
 
 public class TileEntityReceiver extends TileEntityDevice {
@@ -77,6 +80,15 @@ public class TileEntityReceiver extends TileEntityDevice {
         tag.setBoolean("on", world.getBlockState(this.getPos()).getValue(BlockReceiver.ON));
         this.nbt = tag;
         return tag;
+    }
+
+    @Nullable
+    @Override
+    public ITextComponent getDisplayName()
+    {
+        if(nbt != null)
+            return nbt.hasKey("name") ? new TextComponentString(nbt.getString("name")) : null;
+        return null;
     }
 
 

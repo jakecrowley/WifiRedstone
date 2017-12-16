@@ -5,10 +5,13 @@ import com.jakecrowley.redstonewifi.gui.GuiHandler;
 import com.jakecrowley.redstonewifi.init.RegistrationHandler;
 import com.jakecrowley.redstonewifi.task.TaskSetName;
 import com.jakecrowley.redstonewifi.task.TaskSetState;
+import com.jakecrowley.redstonewifi.tileentity.TileEntityReceiver;
+import com.jakecrowley.redstonewifi.tileentity.render.ReceiverRenderer;
 import com.mrcrayfish.device.api.ApplicationManager;
 import com.mrcrayfish.device.api.task.Task;
 import com.mrcrayfish.device.api.task.TaskManager;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -34,7 +37,7 @@ public class RSWifiAppMod
         logger = event.getModLog();
         RegistrationHandler.init();
         NetworkRegistry.INSTANCE.registerGuiHandler(this, new GuiHandler());
-
+        ClientRegistry.bindTileEntitySpecialRenderer(TileEntityReceiver.class, new ReceiverRenderer());
     }
 
     @EventHandler
