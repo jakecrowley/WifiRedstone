@@ -7,7 +7,6 @@ import net.minecraftforge.fml.common.network.IGuiHandler;
 import javax.annotation.Nullable;
 
 public class GuiHandler implements IGuiHandler {
-    public static final int RECEIVER_GUI = 0;
 
     @Override
     public Object getServerGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {

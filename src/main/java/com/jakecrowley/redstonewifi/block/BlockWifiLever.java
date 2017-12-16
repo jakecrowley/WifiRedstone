@@ -1,5 +1,6 @@
 package com.jakecrowley.redstonewifi.block;
 
+import com.jakecrowley.redstonewifi.gui.WifiLeverGUI;
 import com.jakecrowley.redstonewifi.task.TaskSetStateWL;
 import com.jakecrowley.redstonewifi.tileentity.TEWifiLever;
 import com.jakecrowley.redstonewifi.tileentity.TileEntityReceiver;
@@ -14,6 +15,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.PropertyBool;
 import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
@@ -97,8 +99,12 @@ public class BlockWifiLever extends BlockHorizontal implements ITileEntityProvid
     public boolean onBlockActivated(World worldIn, BlockPos pos, IBlockState state, EntityPlayer playerIn, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
         if(!worldIn.isRemote){
-            Task t = new TaskSetStateWL(pos, !state.getValue(ON));
-            TaskManager.sendTask(t);
+            if(playerIn.isSneaking()){
+                Minecraft.getMinecraft().displayGuiScreen(new WifiLeverGUI());
+            } else {
+                Task t = new TaskSetStateWL(pos, !state.getValue(ON));
+                TaskManager.sendTask(t);
+            }
         }
         return false;
     }
