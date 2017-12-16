@@ -1,6 +1,7 @@
 package com.jakecrowley.redstonewifi.init;
 
 import com.jakecrowley.redstonewifi.block.BlockReceiver;
+import com.jakecrowley.redstonewifi.block.BlockWifiLever;
 import com.jakecrowley.redstonewifi.tileentity.TileEntityReceiver;
 import com.jakecrowley.redstonewifi.tileentity.render.ReceiverRenderer;
 import net.minecraft.block.Block;
@@ -9,15 +10,18 @@ import net.minecraftforge.fml.client.registry.ClientRegistry;
 
 public class BlockRegister {
     public static final Block RECEIVER;
+    public static final Block WIFILEVER;
 
     static
     {
         RECEIVER = new BlockReceiver();
+        WIFILEVER = new BlockWifiLever();
     }
 
     public static void register()
     {
         registerBlock(RECEIVER);
+        registerBlock(WIFILEVER);
     }
 
     private static void registerBlock(Block block)

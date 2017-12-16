@@ -5,6 +5,7 @@ import com.jakecrowley.redstonewifi.gui.GuiHandler;
 import com.jakecrowley.redstonewifi.init.RegistrationHandler;
 import com.jakecrowley.redstonewifi.task.TaskSetName;
 import com.jakecrowley.redstonewifi.task.TaskSetState;
+import com.jakecrowley.redstonewifi.task.TaskSetStateWL;
 import com.jakecrowley.redstonewifi.tileentity.TileEntityReceiver;
 import com.jakecrowley.redstonewifi.tileentity.render.ReceiverRenderer;
 import com.mrcrayfish.device.api.ApplicationManager;
@@ -29,6 +30,7 @@ public class RSWifiAppMod
     public static RSWifiAppMod instance = new RSWifiAppMod();
 
     public static ArrayList<Task> toSet = new ArrayList<>();
+    public static ArrayList<Task> toSetWL = new ArrayList<>();
 
     private static Logger logger;
 
@@ -45,6 +47,7 @@ public class RSWifiAppMod
 
         ApplicationManager.registerApplication(new ResourceLocation(Reference.MOD_ID+"RSWifiApp", "RSWifi"), RSWifiApp.class);
         TaskManager.registerTask(TaskSetState.class);
+        TaskManager.registerTask(TaskSetStateWL.class);
         TaskManager.registerTask(TaskSetName.class);
     }
 

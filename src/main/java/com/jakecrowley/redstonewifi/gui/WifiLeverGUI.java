@@ -1,16 +1,18 @@
 package com.jakecrowley.redstonewifi.gui;
 
+import com.jakecrowley.redstonewifi.Reference;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListButton;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.util.ResourceLocation;
 
-public class ReceiverGui extends GuiScreen{
+public class WifiLeverGUI extends GuiScreen{
 
     GuiButton a;
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks){
-        this.drawDefaultBackground();
+        mc.renderEngine.bindTexture(new ResourceLocation(Reference.MOD_ID, "gui/background.png"));
         super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
