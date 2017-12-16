@@ -3,6 +3,7 @@ package com.jakecrowley.redstonewifi;
 import com.jakecrowley.redstonewifi.app.RSWifiApp;
 import com.jakecrowley.redstonewifi.gui.GuiHandler;
 import com.jakecrowley.redstonewifi.init.RegistrationHandler;
+import com.jakecrowley.redstonewifi.task.TaskSetLeverPair;
 import com.jakecrowley.redstonewifi.task.TaskSetName;
 import com.jakecrowley.redstonewifi.task.TaskSetState;
 import com.jakecrowley.redstonewifi.task.TaskSetStateWL;
@@ -49,6 +50,7 @@ public class RSWifiAppMod
         TaskManager.registerTask(TaskSetState.class);
         TaskManager.registerTask(TaskSetStateWL.class);
         TaskManager.registerTask(TaskSetName.class);
+        TaskManager.registerTask(TaskSetLeverPair.class);
     }
 
     public static Logger getLogger()

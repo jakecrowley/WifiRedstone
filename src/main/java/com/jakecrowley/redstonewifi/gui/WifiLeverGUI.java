@@ -2,6 +2,7 @@ package com.jakecrowley.redstonewifi.gui;
 
 import com.jakecrowley.redstonewifi.Reference;
 import com.jakecrowley.redstonewifi.block.BlockReceiver;
+import com.jakecrowley.redstonewifi.task.TaskSetLeverPair;
 import com.jakecrowley.redstonewifi.tileentity.TileEntityReceiver;
 import com.mrcrayfish.device.api.app.component.ItemList;
 import com.mrcrayfish.device.api.task.Task;
@@ -60,11 +61,9 @@ public class WifiLeverGUI extends GuiScreen{
 
     @Override
     public void initGui(){
-        //System.out.println(this.pos);
         Task t = new TaskGetDevices(this.pos, TileEntityReceiver.class);
         t.setCallback((tagCompound, success) ->
         {
-            System.out.println(tagCompound);
             if(success)
             {
                 for(String s : tagCompound.toString().split("pos:")){
@@ -119,7 +118,9 @@ public class WifiLeverGUI extends GuiScreen{
             btnnew.enabled = false;
             buttonList.set(3, btnnew);
         } else if(button == this.pairDevice){
-            System.out.println("pair btn pressed");
+            System.out.println("Paring lever to receiver " + receiverList.get(index));
+            Task t = new TaskSetLeverPair(this.pos, recpos.get(index));
+            TaskManager.sendTask(t);
         }
     }
 }

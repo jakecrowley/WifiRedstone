@@ -3,6 +3,7 @@ package com.jakecrowley.redstonewifi.tileentity;
 import com.jakecrowley.redstonewifi.RSWifiAppMod;
 import com.jakecrowley.redstonewifi.block.BlockReceiver;
 import com.jakecrowley.redstonewifi.block.BlockWifiLever;
+import com.jakecrowley.redstonewifi.task.TaskSetState;
 import com.jakecrowley.redstonewifi.task.TaskSetStateWL;
 import com.mrcrayfish.device.api.task.Task;
 import com.mrcrayfish.device.api.task.TaskManager;
@@ -21,6 +22,7 @@ import java.util.ConcurrentModificationException;
 public class TEWifiLever extends TileEntityDevice {
 
     private NBTTagCompound nbt;
+    Boolean state = false;
 
     @Override
     public String getDeviceName() {
@@ -52,6 +54,12 @@ public class TEWifiLever extends TileEntityDevice {
         } catch (NullPointerException e){
             BlockPos pos = new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
             world.setBlockState(pos, world.getBlockState(pos).withProperty(BlockWifiLever.ON, nbt.getBoolean("on")));
+        }
+
+        if(nbt.hasKey("pair")){
+            BlockPos pairedReceiver = BlockPos.fromLong(nbt.getLong("pair"));
+            Task t = new TaskSetState(pairedReceiver, nbt.getBoolean("on"));
+            TaskManager.sendTask(t);
         }
 
         super.readFromNBT(nbt);
