@@ -123,10 +123,11 @@ public class RSWifiApp extends Application {
 								recpos.add(blockPos);
 
 								String name = ((TileEntityReceiver)world.getTileEntity(blockPos)).getName();
-								if(name != null)
+								if(name != null) {
 									receiverList.addItem(name);
-								else
+								}else {
 									receiverList.addItem("Receiver #" + receivers.size());
+								}
 							}
 						}
 					}

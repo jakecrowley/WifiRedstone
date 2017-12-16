@@ -100,7 +100,7 @@ public class BlockWifiLever extends BlockHorizontal implements ITileEntityProvid
     {
         if(!worldIn.isRemote){
             if(playerIn.isSneaking()){
-                Minecraft.getMinecraft().displayGuiScreen(new WifiLeverGUI());
+                Minecraft.getMinecraft().displayGuiScreen(new WifiLeverGUI(pos));
             } else {
                 Task t = new TaskSetStateWL(pos, !state.getValue(ON));
                 TaskManager.sendTask(t);
