@@ -75,7 +75,7 @@ public class RSWifiApp extends Application {
 						}
 					}
 				}
-				if(receiverList.getSelectedIndex() != -1)
+				if(receiverList.getSelectedIndex() != -1 || receiverList.getSelectedIndex() > receiverList.getItems().size()-1)
 					state.setText("State: " + ((receivers.get(receiverList.getSelectedIndex()).getValue(BlockReceiver.ON)) ? "ON" : "OFF"));
 				else if(receivers.size() >= 1)
 					state.setText("State: " + ((receivers.get(0).getValue(BlockReceiver.ON)) ? "ON" : "OFF"));

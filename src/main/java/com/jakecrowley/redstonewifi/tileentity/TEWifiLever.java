@@ -3,6 +3,7 @@ package com.jakecrowley.redstonewifi.tileentity;
 import com.jakecrowley.redstonewifi.RSWifiAppMod;
 import com.jakecrowley.redstonewifi.block.BlockReceiver;
 import com.jakecrowley.redstonewifi.block.BlockWifiLever;
+import com.jakecrowley.redstonewifi.task.TaskSetLeverPair;
 import com.jakecrowley.redstonewifi.task.TaskSetState;
 import com.jakecrowley.redstonewifi.task.TaskSetStateWL;
 import com.mrcrayfish.device.api.task.Task;
@@ -40,6 +41,7 @@ public class TEWifiLever extends TileEntityDevice {
     @Override
     public void readFromNBT(NBTTagCompound nbt)
     {
+        System.out.println(nbt);
         try {
             if (RSWifiAppMod.toSetWL.size() > 0) {
                 for (Task t : RSWifiAppMod.toSetWL) {
@@ -56,10 +58,17 @@ public class TEWifiLever extends TileEntityDevice {
             world.setBlockState(pos, world.getBlockState(pos).withProperty(BlockWifiLever.ON, nbt.getBoolean("on")));
         }
 
-        if(nbt.hasKey("pair")){
-            BlockPos pairedReceiver = BlockPos.fromLong(nbt.getLong("pair"));
-            Task t = new TaskSetState(pairedReceiver, nbt.getBoolean("on"));
-            TaskManager.sendTask(t);
+        if(world != null) {
+            if (nbt.hasKey("pair")) {
+                BlockPos pairedReceiver = BlockPos.fromLong(nbt.getLong("pair"));
+                Task t = new TaskSetState(pairedReceiver, nbt.getBoolean("on"));
+                TaskManager.sendTask(t);
+
+                if (!((TileEntityReceiver) world.getTileEntity(pairedReceiver)).writeSyncTag().hasKey("pair")) {
+                    Task t2 = new TaskSetLeverPair(this.pos, pairedReceiver);
+                    TaskManager.sendTask(t2);
+                }
+            }
         }
 
         super.readFromNBT(nbt);
@@ -69,7 +78,7 @@ public class TEWifiLever extends TileEntityDevice {
     @Override
     public NBTTagCompound writeToNBT(NBTTagCompound nbt)
     {
-        nbt = (this.nbt != null) ? this.nbt : nbt;
+        nbt = (this.nbt != null) ? this.nbt : new NBTTagCompound();
         nbt.setBoolean("on", world.getBlockState(this.getPos()).getValue(BlockWifiLever.ON));
         this.nbt = nbt;
         super.writeToNBT(nbt);

@@ -44,6 +44,14 @@ public class TaskSetLeverPair extends Task
         NBTTagCompound tag = lever.writeSyncTag();
         tag.setLong("pair", receiverpos);
         lever.writeToNBT(tag);
+
+        TileEntityReceiver receiver = ((TileEntityReceiver)world.getTileEntity(BlockPos.fromLong(receiverpos)));
+        NBTTagCompound rtag = receiver.writeSyncTag();
+        if(rtag.hasKey("pair"))
+            rtag.setString("pair", rtag.getString("pair") + "," + leverpos.toLong());
+        else
+            rtag.setString("pair", ""+leverpos.toLong());
+        receiver.writeToNBT(rtag);
     }
 
     @Override

@@ -4,6 +4,7 @@ import com.jakecrowley.redstonewifi.RSWifiAppMod;
 import com.jakecrowley.redstonewifi.app.RSWifiApp;
 import com.jakecrowley.redstonewifi.block.BlockReceiver;
 import com.jakecrowley.redstonewifi.task.TaskSetState;
+import com.jakecrowley.redstonewifi.task.TaskSetStateWL;
 import com.mrcrayfish.device.api.task.Task;
 import com.mrcrayfish.device.api.task.TaskManager;
 import com.mrcrayfish.device.core.network.Connection;
@@ -51,11 +52,38 @@ public class TileEntityReceiver extends TileEntityDevice {
             }
         } catch (ConcurrentModificationException e){ /* NOOP */ }
 
-        try {
-            FMLCommonHandler.instance().getMinecraftServerInstance().getServerOwner();
-        } catch (NullPointerException e){
-            BlockPos pos = new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
-            world.setBlockState(pos, world.getBlockState(pos).withProperty(BlockReceiver.ON, nbt.getBoolean("on")));
+        if(world != null) {
+
+            if (nbt.hasKey("pair")) {
+                if (nbt.getString("pair").contains(",")) {
+                    for (String s : nbt.getString("pair").split(",")) {
+                        BlockPos lever = BlockPos.fromLong(Long.parseLong(s));
+                        if (world.getTileEntity(lever) instanceof TEWifiLever) {
+                            Task t = new TaskSetStateWL(lever, world.getBlockState(this.getPos()).getValue(BlockReceiver.ON));
+                            TaskManager.sendTask(t);
+                        } else {
+                            nbt.setString("pair", nbt.getString("pair").replace("," + lever.toLong(), ""));
+                            writeToNBT(nbt);
+                            System.out.println("Paired lever nonexistent");
+                        }
+                    }
+                } else {
+                    System.out.println(nbt);
+                    BlockPos lever = BlockPos.fromLong(Long.parseLong(nbt.getString("pair")));
+                    if (lever != null && world.getTileEntity(lever) instanceof TEWifiLever) {
+                        Task t = new TaskSetStateWL(lever, world.getBlockState(this.getPos()).getValue(BlockReceiver.ON));
+                        TaskManager.sendTask(t);
+                    }
+                }
+            }
+
+            try {
+                FMLCommonHandler.instance().getMinecraftServerInstance().getServerOwner();
+            } catch (NullPointerException e) {
+                BlockPos pos = new BlockPos(nbt.getInteger("x"), nbt.getInteger("y"), nbt.getInteger("z"));
+                world.setBlockState(pos, world.getBlockState(pos).withProperty(BlockReceiver.ON, nbt.getBoolean("on")));
+            }
+
         }
 
         super.readFromNBT(nbt);
